@@ -1,7 +1,7 @@
 Summary: Tools to manage multipath devices using device-mapper
 Name: device-mapper-multipath
 Version: 0.8.4
-Release: 37%{?dist}
+Release: 41%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://christophe.varoqui.free.fr/
@@ -142,6 +142,12 @@ Patch00128: 0128-libmutipath-validate-the-argument-count-of-config-st.patch
 Patch00129: 0129-libmultipath-select-resize-action-even-if-reload-is-.patch
 Patch00130: 0130-libmultipath-cleanup-ACT_CREATE-code-in-select_actio.patch
 Patch00131: 0131-libmultipath-keep-renames-from-stopping-other-multip.patch
+Patch00132: 0132-multipathd-make-pr-registration-consistent.patch
+Patch00133: 0133-libmultipath-make-prflag-an-enum.patch
+Patch00134: 0134-multipathd-handle-no-active-paths-in-update_map_pr.patch
+Patch00135: 0135-libmpathpersist-fix-resource-leak-in-update_map_pr.patch
+Patch00136: 0136-multipathd-Added-support-to-handle-FPIN-Li-events-fo.patch
+Patch00137: 0137-multipathd-Make-sure-to-disable-queueing-if-recovery.patch
 
 # runtime
 Requires: %{name}-libs = %{version}-%{release}
@@ -320,7 +326,7 @@ fi
 %{!?_licensedir:%global license %%doc}
 %license LICENSES/GPL-2.0
 %{_sbindir}/kpartx
-/usr/lib/udev/kpartx_id
+%{_udevrulesdir}/../kpartx_id
 %{_mandir}/man8/kpartx.8.gz
 %config %{_udevrulesdir}/11-dm-parts.rules
 %config %{_udevrulesdir}/66-kpartx.rules
@@ -346,6 +352,28 @@ fi
 %{_pkgconfdir}/libdmmp.pc
 
 %changelog
+* Fri Jan  5 2024 Benjamin Marzinski <bmarzins@redhat.com> 0.8.4-41
+- Add 0137-multipathd-Make-sure-to-disable-queueing-if-recovery.patch
+- Resolves: RHEL-16563
+
+* Thu Nov  2 2023 Benjamin Marzinski <bmarzins@redhat.com> 0.8.4-40
+- Add 0136-multipathd-Added-support-to-handle-FPIN-Li-events-fo.patch
+  * Add support in multipathd for NVMe to listen for FPIN-Li events and
+    mark effected paths as marginal
+- Resolves: RHEL-6677
+
+* Thu Mar 16 2023 Benjamin Marzinski <bmarzins@redhat.com> 0.8.4-39
+- Add OSCI tests directory
+- Make kpartx_id installation location relative to %{_udevrulesdir}
+- Resolves: bz #2164871
+
+* Wed Mar 15 2023 Benjamin Marzinski <bmarzins@redhat.com> 0.8.4-38
+- Add 0132-multipathd-make-pr-registration-consistent.patch
+- Add 0133-libmultipath-make-prflag-an-enum.patch
+- Add 0134-multipathd-handle-no-active-paths-in-update_map_pr.patch
+- Add 0135-libmpathpersist-fix-resource-leak-in-update_map_pr.patch
+- Resolves: bz #2164871
+
 * Fri Feb  3 2023 Benjamin Marzinski <bmarzins@redhat.com> 0.8.4-37
 - Fix bugzilla linked to the changes (was previously linked to
   the wrong bug, 2162537)
